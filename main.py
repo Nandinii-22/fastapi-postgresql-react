@@ -1,3 +1,4 @@
+import os
 from fastapi import Depends, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from models import Product, ProductCreate
@@ -9,8 +10,12 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
-    allow_methods=["*"]
+    allow_origins=[
+        "http://localhost:3000",
+        os.getenv("FRONTEND_URL", ""),
+    ],
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 database_models.Base.metadata.create_all(bind=engine)
